@@ -89,6 +89,10 @@ void Application::onKey(unsigned char key, int x, int y)
 		glutLeaveMainLoop();
 		break;
 
+	case 13: // ENTER
+		renderer.stop();
+		break;
+
 	case 'h': // Switch Help display
 		config.toggleGuiHelp();
 		FINFO("HELP has been switched "

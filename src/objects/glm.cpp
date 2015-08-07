@@ -159,7 +159,7 @@ duplicate:
 
 /* glmFindGroup: Find a group in the model */
 GLMgroup*
-glmFindGroup(GLMmodel* model, char* name)
+glmFindGroup(GLMmodel* model, const char* name)
 {
     GLMgroup* group;
     
@@ -177,7 +177,7 @@ glmFindGroup(GLMmodel* model, char* name)
 
 /* glmAddGroup: Add a group to the model */
 GLMgroup*
-glmAddGroup(GLMmodel* model, char* name)
+glmAddGroup(GLMmodel* model, const char* name)
 {
     GLMgroup* group;
     
@@ -1486,7 +1486,7 @@ glmWriteOBJ(GLMmodel* model, char* filename, GLuint mode)
     /* spit out the texture coordinates */
     if (mode & GLM_TEXTURE) {
         fprintf(file, "\n");
-        fprintf(file, "# %d texcoords\n", model->texcoords);
+		  fprintf(file, "# %f texcoords\n", *(model->texcoords));
         for (i = 1; i <= model->numtexcoords; i++) {
             fprintf(file, "vt %f %f\n", 
                 model->texcoords[2 * i + 0],
