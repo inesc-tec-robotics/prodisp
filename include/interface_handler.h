@@ -10,7 +10,7 @@
 #include "ros/subscriber.h"
 #include <tf2_ros/transform_listener.h>
 #include <tf2_ros/buffer.h>
-#include "ar_track_alvar_msgs/AlvarMarkers.h"
+//#include "ar_track_alvar_msgs/AlvarMarkers.h"
 #include <actionlib/server/simple_action_server.h>
 #include <actionlib/client/simple_action_client.h>
 #include "mission_ctrl_msgs/performTeachingAction.h"
@@ -32,7 +32,7 @@ public:
 	InterfaceHandler();
 	~InterfaceHandler();
 
-	void bindAlvar(sg::Tf* transform)	{ tf_alvar_ = transform; }
+//	void bindAlvar(sg::Tf* transform)	{ tf_alvar_ = transform; }
 	void bindWii(boost::weak_ptr<Cursor> cursor);
 
 	void addRosTf(std::string src_frame, std::string trg_frame, sg::Tf* tf);
@@ -59,7 +59,7 @@ private:
 
 /****** Interfaces ******/
 private:
-	void cbAlvar(const ar_track_alvar_msgs::AlvarMarkersConstPtr& msg);
+//	void cbAlvar(const ar_track_alvar_msgs::AlvarMarkersConstPtr& msg);
 
 	ros::NodeHandle					nh_;
 

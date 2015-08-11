@@ -35,7 +35,10 @@ InterfaceHandler::InterfaceHandler()
 	// Start publisher to robot arm:
 //	pub_move_robot = nh_.advertise<geometry_msgs::PoseArray>(CARLOS_JOINT_MOVE_MSG, 10);
 
-	sub_alvar_ = nh_.subscribe("/ar_pose_marker", 2, &InterfaceHandler::cbAlvar, this);
+	// Track AR markers:
+//	sub_alvar_ = nh_.subscribe("/ar_pose_marker", 2, &InterfaceHandler::cbAlvar, this);
+
+	// Interface to Wii remote:
 	wii_handler_.reset( new WiiHandler );
 }
 
@@ -56,7 +59,7 @@ InterfaceHandler::~InterfaceHandler()
 	// Shut down ROS stuff:
 	ros::spinOnce();
 	as_wii_teaching_.shutdown();
-	sub_alvar_.shutdown();
+//	sub_alvar_.shutdown();
 }
 
 void InterfaceHandler::bindWii(boost::weak_ptr<Cursor> cursor)
@@ -90,22 +93,22 @@ void InterfaceHandler::refreshRosTf()
 	}
 }
 
-void InterfaceHandler::cbAlvar(const ar_track_alvar_msgs::AlvarMarkersConstPtr& msg)
-{
-	FDEBUG("InterfaceHandler::cbAlvar");
-	for (int i = 0; i < (int)msg->markers.size(); i++)
-	{
-		ar_track_alvar_msgs::AlvarMarker m = msg->markers[i];
-		int id = m.id;
-		geometry_msgs::Pose pos = m.pose.pose;
+//void InterfaceHandler::cbAlvar(const ar_track_alvar_msgs::AlvarMarkersConstPtr& msg)
+//{
+//	FDEBUG("InterfaceHandler::cbAlvar");
+//	for (int i = 0; i < (int)msg->markers.size(); i++)
+//	{
+//		ar_track_alvar_msgs::AlvarMarker m = msg->markers[i];
+//		int id = m.id;
+//		geometry_msgs::Pose pos = m.pose.pose;
 
-		if (id == 0 && tf_alvar_ != NULL)
-		{
-			MathOp::Transform transform(pos);
-			tf_alvar_->set(transform);
-		}
-	}
-}
+//		if (id == 0 && tf_alvar_ != NULL)
+//		{
+//			MathOp::Transform transform(pos);
+//			tf_alvar_->set(transform);
+//		}
+//	}
+//}
 
 void InterfaceHandler::cbWiiTeachingGoal(void)
 {

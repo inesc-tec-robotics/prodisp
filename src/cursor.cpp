@@ -161,8 +161,7 @@ void Cursor::cbCursorBorder(const ros::TimerEvent&)
 	// Move robot arm:
 	if (state_ != CursorStates::Calibrating && (proj_x != 0.0 || proj_y != 0.0))
 	{
-		// RSA_TODO comment in
-//		Renderer::getInstance().getInterfaceHandler().moveProjectorIncr(proj_x, proj_y);
+		Renderer::getInstance().getInterfaceHandler().moveProjectorIncr(proj_x, proj_y);
 	}
 
 }

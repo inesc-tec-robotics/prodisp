@@ -9,7 +9,7 @@
 //=================================
 // Included dependencies
 //=================================
-#include <boost/timer/timer.hpp>
+//#include <boost/timer/timer.hpp>
 
 
 
@@ -27,7 +27,7 @@ private:
 //	int getMilliCount(void);
 //	int getMilliSpan(int nTimeStart);
 
-	boost::timer::cpu_timer timer_;
+//	boost::timer::cpu_timer timer_;
 };
 
 
