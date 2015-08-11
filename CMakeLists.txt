@@ -30,7 +30,7 @@ include_directories(${OpenCV_INCLUDE_DIRS})
 
 # Boost:
 find_package(Boost REQUIRED COMPONENTS
-             thread system timer filesystem )
+             thread system filesystem ) # timer
 include_directories(${Boost_INCLUDE_DIRS})
 
 # tf:
