@@ -305,8 +305,8 @@ bool Configuration::parseParam(const string key, const string value)
 
 	// Camera parameters:
 	else if (key == "proj_matrix")			proj_matrix_data_		= parseMatrix(value);
-	else if (key == "proj_distortions")		proj_distortions_ = parseMatrix(value);
-	else if (key == "proj_resolution")		proj_res				= parseVector(value);
+	else if (key == "proj_distortions")		proj_distortions_		= parseMatrix(value);
+	else if (key == "proj_resolution")		proj_res					= parseVector(value);
 	else if (key == "proj2cam")
 	{
 		cam2proj_ = MathOp::Transform( parseMatrix(value) );

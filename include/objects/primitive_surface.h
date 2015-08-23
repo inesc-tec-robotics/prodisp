@@ -59,7 +59,7 @@ private:
 	void drawFace(Face* face);
 
 protected:
-	boost::scoped_ptr<Texture> texture_;	// if false, use colours instead
+	boost::shared_ptr<Texture> texture_;	// if false, use colours instead
 
 private:
 	Colour c_ambient_;

@@ -28,15 +28,26 @@ PrimitiveSurface::PrimitiveSurface(const PrimitiveSurface& src)
 					 src.normals_[i]->c[1],
 					 src.normals_[i]->c[2]);
 
+	// Copy uvs:
+	for (int i = 0; i < (int)src.uvs_.size(); ++i)
+		addUV(src.uvs_[i]->c[0],
+				src.uvs_[i]->c[1]);
+
+	// Copy texture:
+	if (src.texture_)
+		texture_ = src.texture_;
+
 	// Copy faces:
 	for (int f = 0; f < (int)src.faces_.size(); ++f)
 	{
 		int dest_v_i[3];
 		int dest_n_i[3];
+		int dest_uv_i[3];
 
 		for (int p = 0; p < 3; ++p)
 		{
 			Vector3* src_v = src.faces_[f]->vertices_[p];
+			Vector2* src_uv= src.faces_[f]->uvs_[p];
 			Vector3* src_n = src.faces_[f]->normals_[p];
 
 			// Find the same vertex in this:
@@ -63,10 +74,35 @@ PrimitiveSurface::PrimitiveSurface(const PrimitiveSurface& src)
 				}
 			}
 
+			// Find the same uv in this:
+			if (src.texture_)
+			{
+				for (int i = 0; i < (int)uvs_.size(); ++i)
+				{
+					Vector2* dest_uv = uvs_[i];
+					if (*src_uv == *dest_uv)
+					{
+						// Found!
+						dest_uv_i[p] = i;
+						break;
+					}
+				}
+			}
+
 		}
+
 		// Add new face:
-		addFace(dest_v_i[0], dest_v_i[1], dest_v_i[2],
-				  dest_n_i[0], dest_n_i[1], dest_n_i[2]);
+		if (src.texture_)
+		{
+			addFace(dest_v_i[0], dest_v_i[1], dest_v_i[2],
+					  dest_n_i[0], dest_n_i[1], dest_n_i[2]);
+		}
+		else
+		{
+			addFace(dest_v_i[0], dest_v_i[1], dest_v_i[2],
+					  dest_n_i[0], dest_n_i[1], dest_n_i[2],
+					  dest_uv_i[0], dest_uv_i[1], dest_uv_i[2]);
+		}
 	}
 }
 

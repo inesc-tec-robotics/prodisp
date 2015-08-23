@@ -103,6 +103,10 @@ void RenderSystem::initGL()
 //	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (Colour::WHITE).c);
 	/********* Global ambient *********/
 
+	// Cull (do not render) back sides:
+//	glEnable(GL_CULL_FACE);
+//	glCullFace(GL_BACK);
+
 	/********* Nice 3D lights *********/
 	glLightModelfv(GL_LIGHT_MODEL_AMBIENT, (Colour::WHITE*0.05).c);
 

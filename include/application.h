@@ -27,7 +27,6 @@ private:
 
 	boost::scoped_ptr<Configuration> config_;
 	boost::scoped_ptr<RenderSystem> render_system_;
-//	boost::scoped_ptr<InterfaceHandler> interface_handler_;
 	boost::scoped_ptr<Renderer> renderer_;
 };
 

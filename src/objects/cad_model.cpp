@@ -115,12 +115,14 @@ bool CadModel::drawVertices()
 		glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 		glLineWidth(1);
 	}
-	else
-	{
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		glEnable(GL_LIGHTING);
-		glEnable(GL_DEPTH_TEST);
-	}
+
+	// Draw:
 	glCallList(dl_);
+
+	// Reset:
+	glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+	glEnable(GL_LIGHTING);
+	glEnable(GL_DEPTH_TEST);
+
 	return true;
 }

@@ -37,9 +37,6 @@ Application::Application(int* argcp, char* argv[])
 	config_.reset(new Configuration());
 	config_->initialize(*argcp, argv);
 
-	// Start interface:
-//	interface_handler_.reset(new InterfaceHandler());
-
 	// Create subsystems
 	render_system_.reset(new RenderSystem());
 	renderer_.reset(new Renderer());
@@ -47,17 +44,12 @@ Application::Application(int* argcp, char* argv[])
 //	signal(SIGINT, boost::bind(&Application::sigintHandler, this));
 	signal(SIGINT, sigintHandler);
 
-	// Start subsystems
-//	mEstimator->start();
-
 	FINFO("ProDisp is running...");
 }
 
 Application::~Application()
 {
 	cout << "Shutting down ProDisp..." << endl;
-
-
 	// NOTE: The member objects are automatically destroyed in opposite order.
 }
 

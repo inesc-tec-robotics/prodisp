@@ -70,15 +70,19 @@ void InterfaceHandler::bindWii(boost::weak_ptr<Cursor> cursor)
 
 void InterfaceHandler::addRosTf(std::string src_frame, std::string trg_frame, sg::Tf* tf)
 {
-	FDEBUG("InterfaceHandler::addRosTf from '" << src_frame << "' to '" << trg_frame << "'");
+	FINFO("InterfaceHandler::addRosTf from '" << src_frame << "' to '" << trg_frame << "'");
 	RosTfSub tf_sub(src_frame, trg_frame, tf);
 
 	// Call with timeout first time:
 	MathOp::Transform mtf;
-	if (lookupTf(tf_sub.src_frame_, tf_sub.trg_frame_, mtf, ros::Duration(1.0)))
+	if (lookupTf(tf_sub.src_frame_, tf_sub.trg_frame_, mtf, ros::Duration(10.0)))
 	{
 		tf_sub.tf_->set(mtf);
 		ros_tf_subs_.push_back(tf_sub);
+	}
+	else
+	{
+		FERROR("TF from '" << src_frame << "' to '" << trg_frame << "' ignored (not added).");
 	}
 }
 
