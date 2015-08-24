@@ -152,7 +152,7 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 
 			// Read and save pose:
 			projection_pose_relative_ = cv::Vec2d(0,0);
-			lookupTf("base_link", "projector_link", projection_pose_start_);
+			lookupTf("base_footprint", "projector_link", projection_pose_start_);
 		}
 	}
 
@@ -183,7 +183,7 @@ void InterfaceHandler::moveProjectorIncr(float x, float y)
 
 	// Create message:
 	mission_ctrl_msgs::moveArmGoal goal;
-	goal.pose.header.frame_id = "projector_link";
+	goal.pose.header.frame_id = "base_footprint";
 	goal.pose.pose = pose_new.getGeometryMsgsPose();
 
 	// Send goal and bind callback:
