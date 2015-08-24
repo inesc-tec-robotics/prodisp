@@ -312,7 +312,6 @@ bool InterfaceHandler::lookupTf(RosTfSub& tf_sub, ros::Duration wait_duration)
 	}
 	catch (tf2::TransformException &ex)
 	{
-		cout << "exception" << endl;
 		if (tf_sub.connected_ == true)
 		{
 			FERROR("TF error (disconnected) from '" << tf_sub.src_frame_ << "'' to '" << tf_sub.trg_frame_ << "': " << ex.what());
