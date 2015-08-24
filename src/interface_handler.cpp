@@ -75,15 +75,18 @@ void InterfaceHandler::addRosTf(std::string src_frame, std::string trg_frame, sg
 
 	// Call with timeout first time:
 	MathOp::Transform mtf;
-	if (lookupTf(tf_sub.src_frame_, tf_sub.trg_frame_, mtf, ros::Duration(10.0)))
+	tf_sub.connected_ = lookupTf(tf_sub.src_frame_, tf_sub.trg_frame_, mtf, ros::Duration(5.0));
+
+	if (tf_sub.connected_)
 	{
 		tf_sub.tf_->set(mtf);
-		ros_tf_subs_.push_back(tf_sub);
 	}
 	else
 	{
-		FERROR("TF from '" << src_frame << "' to '" << trg_frame << "' ignored (not added).");
+		FERROR("TF from '" << src_frame << "' to '" << trg_frame << "' not connected on startup.");
 	}
+
+	ros_tf_subs_.push_back(tf_sub);
 }
 
 void InterfaceHandler::refreshRosTf()
@@ -91,9 +94,7 @@ void InterfaceHandler::refreshRosTf()
 	FDEBUG("InterfaceHandler::refreshRosTf");
 	for (vector<RosTfSub>::iterator tf_sub = ros_tf_subs_.begin(); tf_sub != ros_tf_subs_.end(); ++tf_sub)
 	{
-		MathOp::Transform mtf;
-		if (lookupTf(tf_sub->src_frame_, tf_sub->trg_frame_, mtf))
-			tf_sub->tf_->set(mtf);
+		lookupTf(*tf_sub);
 	}
 }
 
@@ -290,6 +291,33 @@ bool InterfaceHandler::lookupTf(std::string trg_frame, std::string src_frame,
 	catch (tf2::TransformException &ex)
 	{
 		FERROR("TF error from '" << trg_frame << "'' to '" << src_frame << "': " << ex.what());
+		return false;
+	}
+	return true;
+}
+
+bool InterfaceHandler::lookupTf(RosTfSub& tf_sub, ros::Duration wait_duration)
+{
+	try
+	{
+		geometry_msgs::TransformStamped tf_stamped =
+				ros_tf_buffer.lookupTransform(tf_sub.src_frame_, tf_sub.trg_frame_,
+														ros::Time(0), wait_duration);
+		tf_sub.tf_->set(MathOp::Transform(tf_stamped.transform));
+		if (tf_sub.connected_ == false)
+		{
+			tf_sub.connected_ = true;
+			FINFO("TF now connected from '" << tf_sub.src_frame_ << "'' to '" << tf_sub.trg_frame_ << "'");
+		}
+	}
+	catch (tf2::TransformException &ex)
+	{
+		cout << "exception" << endl;
+		if (tf_sub.connected_ == true)
+		{
+			FERROR("TF error (disconnected) from '" << tf_sub.src_frame_ << "'' to '" << tf_sub.trg_frame_ << "': " << ex.what());
+			tf_sub.connected_ = false;
+		}
 		return false;
 	}
 	return true;

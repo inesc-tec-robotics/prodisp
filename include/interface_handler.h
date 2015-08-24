@@ -46,11 +46,13 @@ private:
 	struct RosTfSub
 	{
 		RosTfSub(std::string src_frame, std::string trg_frame, sg::Tf* tf)
-			: src_frame_(src_frame)
+			: connected_(false)
+			, src_frame_(src_frame)
 			, trg_frame_(trg_frame)
 			, tf_(tf)
 		{}
 
+		bool connected_;
 		std::string src_frame_;
 		std::string trg_frame_;
 		sg::Tf* tf_;
@@ -69,6 +71,8 @@ private:
 	bool									lookupTf(std::string trg_frame, std::string src_frame,
 														MathOp::Transform& tf,
 														ros::Duration = ros::Duration(0.0));
+	bool									lookupTf(RosTfSub& tf_sub,
+														ros::Duration wait_duration = ros::Duration(0.0));
 	tf2_ros::Buffer					ros_tf_buffer;
 	tf2_ros::TransformListener		ros_tf_listener_;
 	std::vector<RosTfSub>			ros_tf_subs_;
