@@ -307,11 +307,11 @@ bool Configuration::parseParam(const string key, const string value)
 	else if (key == "proj_matrix")			proj_matrix_data_		= parseMatrix(value);
 	else if (key == "proj_distortions")		proj_distortions_		= parseMatrix(value);
 	else if (key == "proj_resolution")		proj_res					= parseVector(value);
-	else if (key == "proj2cam")
-	{
-		cam2proj_ = MathOp::Transform( parseMatrix(value) );
-		proj2cam_ = cam2proj_.inverse();
-	}
+//	else if (key == "proj2cam")
+//	{
+//		cam2proj_ = MathOp::Transform( parseMatrix(value) );
+//		proj2cam_ = cam2proj_.inverse();
+//	}
 
 	// GUI parameters:
 	else if (key == "full_screen")			full_screen_			= atoi(value.c_str());

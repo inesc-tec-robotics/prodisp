@@ -42,8 +42,8 @@ public:
 	double		getProjAspectRatio() const { return proj_aspect_; }		// RSA_TODO
 	double		getProjResX()					{ return proj_res[0]; }
 	double		getProjResY()					{ return proj_res[1]; }
-	MathOp::Transform getProj2Cam() const	{ return proj2cam_; }
-	MathOp::Transform getCam2Proj() const	{ return cam2proj_; }
+//	MathOp::Transform getProj2Cam() const	{ return proj2cam_; }
+//	MathOp::Transform getCam2Proj() const	{ return cam2proj_; }
 	Rectf			getProj2dEyeArea()	const		{ return proj2d_limits_; }	// left: -1*aspect, bot: -1
 
 
@@ -76,8 +76,8 @@ private:
 	GLdouble		proj_far_;
 	cv::Mat		proj_distortions_;	//	[k1 k2 p1 p2 k3], where k's are radial and p's are tangential components
 	std::vector<double> proj_res;
-	MathOp::Transform proj2cam_;
-	MathOp::Transform cam2proj_;
+//	MathOp::Transform proj2cam_;
+//	MathOp::Transform cam2proj_;
 	double		proj_aspect_;
 	float			proj_fov_y_;
 	Rectf			proj2d_limits_;

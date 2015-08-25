@@ -91,8 +91,8 @@ void WiiHandler::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 		calibration_samples_++;
 		if (calibration_samples_ > 0)
 		{
-			calib_x_sum_ += joy->axes[5];
-			calib_y_sum_ += joy->axes[3];
+			calib_x_sum_ += joy->axes[3];
+			calib_y_sum_ += joy->axes[5];
 		}
 
 		// Stop calibration:
@@ -111,8 +111,8 @@ void WiiHandler::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 	}
 
 	// Move cursor:
-	float x_incr = -0.03*(joy->axes[5] - offset_x_);
-	float y_incr = -0.03*(joy->axes[3] - offset_y_);
+	float x_incr = -0.03*(joy->axes[3] - offset_x_);
+	float y_incr = 0.03*(joy->axes[5] - offset_y_);
 	cursor->incrPos(x_incr, y_incr);
 
 	// Update buttons for next iteration:

@@ -137,6 +137,7 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 	{
 		FDEBUG("Action server on '" << CARLOS_PROJECTION_ACTION << "' started, sending goal.");
 		mission_ctrl_msgs::projectionPoseGoal goal;
+		goal.side = 1;	// RSA_TODO temp
 		ac.sendGoal(goal);
 		if ( !ac.waitForResult(ros::Duration(20.0)) )
 		{
@@ -195,6 +196,11 @@ void InterfaceHandler::cbMoveArmDone(const actionlib::SimpleClientGoalState &sta
 												 const mission_ctrl_msgs::moveArmResultConstPtr &result)
 {
 	FDEBUG("InterfaceHandler::cbMoveArmDone");
+	if (state.state_ == actionlib::SimpleClientGoalState::ABORTED ||
+		 state.state_ == actionlib::SimpleClientGoalState::LOST)
+	{
+		FERROR("MoveArm error: " << state.state_);
+	}
 	move_arm_active_ = false;
 }
 
