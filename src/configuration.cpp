@@ -51,8 +51,8 @@ void Configuration::initialize(int argc, char* argv[])
 
 	if (config_file == "")
 	{
-		FWARN("No configuration file was specified as input! Attempting to use std 'prodisp.cfg'");
-		config_file = "prodisp.cfg";
+		FWARN("No configuration file was specified as input! Attempting to use std 'local.cfg'");
+		config_file = "local.cfg";
 	}
 
 	// Load:
