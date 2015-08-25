@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<launch>
+   
+  <node name="prodisp" pkg="prodisp" type="prodisp" output="screen" respawn="false" required="true" />
+  
+  <remap from="joy" to="wiimote/joy"/>
+  <node name="wiimote" pkg="wiimote" type="wiimote_node.py" respawn="false" required="false" />
+  
+</launch>
