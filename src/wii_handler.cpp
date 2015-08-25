@@ -13,7 +13,7 @@ WiiHandler::WiiHandler()
 	nh_.getParam("wii_offset_y", offset_y_);
 
 	// Start curser:
-	joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("/joy", 10, &WiiHandler::joyCallback, this);
+	joy_sub_ = nh_.subscribe<sensor_msgs::Joy>("/wiimote/joy", 10, &WiiHandler::joyCallback, this);
 }
 
 WiiHandler::~WiiHandler()
