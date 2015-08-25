@@ -80,7 +80,7 @@ private:
 	actionlib::SimpleActionServer<mission_ctrl_msgs::performTeachingAction> as_wii_teaching_;
 	void									cbWiiTeachingGoal(void);
 	std::string							wii_teaching_task_;
-	std::vector<Object*>				loadTask(std::string task);
+	std::vector<Object*>				loadTask(std::string task, int& direction);
 
 	MathOp::Transform					projection_pose_start_;
 	cv::Vec2d							projection_pose_relative_;

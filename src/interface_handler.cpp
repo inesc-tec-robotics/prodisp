@@ -91,7 +91,6 @@ void InterfaceHandler::addRosTf(std::string src_frame, std::string trg_frame, sg
 
 void InterfaceHandler::refreshRosTf()
 {
-	FDEBUG("InterfaceHandler::refreshRosTf");
 	for (vector<RosTfSub>::iterator tf_sub = ros_tf_subs_.begin(); tf_sub != ros_tf_subs_.end(); ++tf_sub)
 	{
 		lookupTf(*tf_sub);
@@ -123,7 +122,8 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 	wii_teaching_task_ = "/mission/tasks/" + as_wii_teaching_.acceptNewGoal()->task_name;
 
 	// Load studs from param server:
-	vector<Object*> studs = loadTask(wii_teaching_task_);
+	int direction;
+	vector<Object*> studs = loadTask(wii_teaching_task_, direction);
 
 	// Move to projection pose:
 	actionlib::SimpleActionClient<mission_ctrl_msgs::projectionPoseAction>
@@ -137,7 +137,7 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 	{
 		FDEBUG("Action server on '" << CARLOS_PROJECTION_ACTION << "' started, sending goal.");
 		mission_ctrl_msgs::projectionPoseGoal goal;
-		goal.side = 1;	// RSA_TODO temp
+		goal.side = direction;
 		ac.sendGoal(goal);
 		if ( !ac.waitForResult(ros::Duration(20.0)) )
 		{
@@ -248,7 +248,7 @@ void InterfaceHandler::wiiTeachingComplete(const vector<Stud*>& studs)
 	FINFO("Teaching succeded; " << studs.size() << " stud positions returned.");
 }
 
-vector<Object*> InterfaceHandler::loadTask(string task)
+vector<Object*> InterfaceHandler::loadTask(string task, int &direction)
 {
 	FDEBUG("InterfaceHandler::loadStuds");
 	FINFO("Loading task: " << task);
@@ -267,7 +267,6 @@ vector<Object*> InterfaceHandler::loadTask(string task)
 	FDEBUG("Loaded " << objects.size() << " studs.");
 
 	// Obstacles:
-	vector<Object*> obstacles;
 	string key_obstacles = task + "/obstacles/";
 	XmlRpc::XmlRpcValue xml_obstacles;
 	ros::param::get(key_obstacles, xml_obstacles);
@@ -279,7 +278,12 @@ vector<Object*> InterfaceHandler::loadTask(string task)
 		if (name.find("fire_extinguisher") != string::npos)
 			objects.push_back(new FireExtinguisher(name, obs_it->second));
 	}
-	FDEBUG("Loaded " << objects.size() << " studs.");
+
+	// Load direction:
+	string key_direction = task + "/direction";
+	ros::param::get(key_direction, direction);
+
+	FINFO("Loaded " << objects.size() << " objects at direction " << direction);
 
 	return objects;
 }
