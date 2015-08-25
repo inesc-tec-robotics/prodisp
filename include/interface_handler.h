@@ -83,7 +83,8 @@ private:
 	std::vector<Object*>				loadTask(std::string task, int& direction);
 
 	MathOp::Transform					projection_pose_start_;
-	cv::Vec2d							projection_pose_relative_;
+	cv::Vec2d							projection_pose_relative_confirmed_;
+	cv::Vec2d							projection_pose_relative_requested_;
 	actionlib::SimpleActionClient<mission_ctrl_msgs::moveArmAction> as_move_arm_;
 	void									cbMoveArmDone(const actionlib::SimpleClientGoalState &state,
 															  const mission_ctrl_msgs::moveArmResultConstPtr &result);

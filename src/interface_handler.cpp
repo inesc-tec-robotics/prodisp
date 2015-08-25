@@ -152,7 +152,7 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 						<< "' finished with state: " << state.toString());
 
 			// Read and save pose:
-			projection_pose_relative_ = cv::Vec2d(0,0);
+			projection_pose_relative_confirmed_ = cv::Vec2d(0,0);
 			lookupTf("base_footprint", "projector_link", projection_pose_start_);
 		}
 	}
@@ -170,9 +170,10 @@ void InterfaceHandler::moveProjectorIncr(float x, float y)
 		return;
 
 	// Create projector pose:
-	projection_pose_relative_[0] += x;
-	projection_pose_relative_[1] += y;
-	MathOp::Transform pose_relative(0, projection_pose_relative_[1], projection_pose_relative_[0], 0, 0, 0, MathOp::ZYX_EULER);
+	projection_pose_relative_requested_[0] = projection_pose_relative_confirmed_[0] + x;
+	projection_pose_relative_requested_[1] = projection_pose_relative_confirmed_[1] + y;
+	MathOp::Transform pose_relative(
+				0, projection_pose_relative_requested_[1],projection_pose_relative_requested_[0], 0, 0, 0, MathOp::ZYX_EULER);
 	MathOp::Transform pose_new = projection_pose_start_ * pose_relative;
 
 	// Check that action server is connected:
@@ -200,6 +201,10 @@ void InterfaceHandler::cbMoveArmDone(const actionlib::SimpleClientGoalState &sta
 		 state.state_ == actionlib::SimpleClientGoalState::LOST)
 	{
 		FERROR("MoveArm error: " << state.state_);
+	}
+	else
+	{
+		projection_pose_relative_confirmed_ = projection_pose_relative_requested_;
 	}
 	move_arm_active_ = false;
 }
