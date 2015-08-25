@@ -32,11 +32,12 @@ InterfaceHandler::InterfaceHandler()
 	as_wii_teaching_.registerGoalCallback(boost::bind(&InterfaceHandler::cbWiiTeachingGoal, this));
 	as_wii_teaching_.start();
 
+	// Read and save pose (refreshed for each teaching goal):
+	projection_pose_relative_confirmed_ = cv::Vec2d(0,0);
+	lookupTf("base_footprint", "projector_link", projection_pose_start_);
+
 	// Start publisher to robot arm:
 //	pub_move_robot = nh_.advertise<geometry_msgs::PoseArray>(CARLOS_JOINT_MOVE_MSG, 10);
-
-	// Track AR markers:
-//	sub_alvar_ = nh_.subscribe("/ar_pose_marker", 2, &InterfaceHandler::cbAlvar, this);
 
 	// Interface to Wii remote:
 	wii_handler_.reset( new WiiHandler );
@@ -125,34 +126,33 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 	int direction;
 	vector<Object*> studs = loadTask(wii_teaching_task_, direction);
 
-	// RSA_TODO temp comment
-//	// Move to projection pose:
-//	actionlib::SimpleActionClient<mission_ctrl_msgs::projectionPoseAction>
-//			ac(CARLOS_PROJECTION_ACTION, true);
-//	if ( !ac.waitForServer(ros::Duration(3.0)) )
-//	{
-//		FERROR("Failed to call action on '" << CARLOS_PROJECTION_ACTION
-//				 << "'. Cannot move to projection pose.");
-//	}
-//	else
-//	{
-//		FDEBUG("Action server on '" << CARLOS_PROJECTION_ACTION << "' started, sending goal.");
-//		mission_ctrl_msgs::projectionPoseGoal goal;
-//		goal.side = direction;
-//		ac.sendGoal(goal);
-//		if ( !ac.waitForResult(ros::Duration(20.0)) )
-//		{
-//			FERROR("Action goal on '" << CARLOS_PROJECTION_ACTION
-//						<< "' did not finish before the time out.");
-//			ac.cancelAllGoals();
-//		}
-//		else
-//		{
-//			actionlib::SimpleClientGoalState state = ac.getState();
-//			FDEBUG("Action goal on  '" << CARLOS_PROJECTION_ACTION
-//						<< "' finished with state: " << state.toString());
-//		}
-//	}
+	// Move to projection pose:
+	actionlib::SimpleActionClient<mission_ctrl_msgs::projectionPoseAction>
+			ac(CARLOS_PROJECTION_ACTION, true);
+	if ( !ac.waitForServer(ros::Duration(3.0)) )
+	{
+		FERROR("Failed to call action on '" << CARLOS_PROJECTION_ACTION
+				 << "'. Cannot move to projection pose.");
+	}
+	else
+	{
+		FDEBUG("Action server on '" << CARLOS_PROJECTION_ACTION << "' started, sending goal.");
+		mission_ctrl_msgs::projectionPoseGoal goal;
+		goal.side = direction;
+		ac.sendGoal(goal);
+		if ( !ac.waitForResult(ros::Duration(20.0)) )
+		{
+			FERROR("Action goal on '" << CARLOS_PROJECTION_ACTION
+						<< "' did not finish before the time out.");
+			ac.cancelAllGoals();
+		}
+		else
+		{
+			actionlib::SimpleClientGoalState state = ac.getState();
+			FDEBUG("Action goal on  '" << CARLOS_PROJECTION_ACTION
+						<< "' finished with state: " << state.toString());
+		}
+	}
 
 	// Read and save pose:
 	projection_pose_relative_confirmed_ = cv::Vec2d(0,0);

@@ -46,7 +46,6 @@ Renderer::Renderer()
 	// Setup 2D overlayed graphics:
 	setupGraphics2D();
 
-//	usleep(500000);	// RSA_TODO remove
 //	ros::spinOnce();
 
 	if (Configuration::getInstance().getEnableAtStart())
