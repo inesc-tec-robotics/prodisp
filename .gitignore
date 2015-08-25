@@ -33,3 +33,12 @@ build/
 *.yaml~
 *.*~
 /local.cfg
+/CMakeFiles/
+/catkin_generated/
+/catkin/
+/gtest/
+/test_results/
+*.cmake
+/CMakeCache.txt
+/Makefile
+*.cbp

@@ -176,7 +176,7 @@ void InterfaceHandler::moveProjectorIncr(float x, float y)
 	projection_pose_relative_requested_[0] = projection_pose_relative_confirmed_[0] + x;
 	projection_pose_relative_requested_[1] = projection_pose_relative_confirmed_[1] + y;
 	MathOp::Transform pose_relative(
-				0, projection_pose_relative_requested_[1],projection_pose_relative_requested_[0], 0, 0, 0, MathOp::ZYX_EULER);
+				0, -projection_pose_relative_requested_[0], -projection_pose_relative_requested_[1], 0, 0, 0, MathOp::ZYX_EULER);
 	MathOp::Transform pose_new = projection_pose_start_ * pose_relative;
 
 	// Check that action server is connected:
