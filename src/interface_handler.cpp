@@ -75,7 +75,7 @@ void InterfaceHandler::addRosTf(std::string src_frame, std::string trg_frame, sg
 
 	// Call with timeout first time:
 	MathOp::Transform mtf;
-	tf_sub.connected_ = lookupTf(tf_sub.src_frame_, tf_sub.trg_frame_, mtf, ros::Duration(5.0));
+	tf_sub.connected_ = lookupTf(tf_sub.src_frame_, tf_sub.trg_frame_, mtf, ros::Duration(2.0));
 
 	if (tf_sub.connected_)
 	{
@@ -125,37 +125,40 @@ void InterfaceHandler::cbWiiTeachingGoal(void)
 	int direction;
 	vector<Object*> studs = loadTask(wii_teaching_task_, direction);
 
-	// Move to projection pose:
-	actionlib::SimpleActionClient<mission_ctrl_msgs::projectionPoseAction>
-			ac(CARLOS_PROJECTION_ACTION, true);
-	if ( !ac.waitForServer(ros::Duration(3.0)) )
-	{
-		FERROR("Failed to call action on '" << CARLOS_PROJECTION_ACTION
-				 << "'. Cannot move to projection pose.");
-	}
-	else
-	{
-		FDEBUG("Action server on '" << CARLOS_PROJECTION_ACTION << "' started, sending goal.");
-		mission_ctrl_msgs::projectionPoseGoal goal;
-		goal.side = direction;
-		ac.sendGoal(goal);
-		if ( !ac.waitForResult(ros::Duration(20.0)) )
-		{
-			FERROR("Action goal on '" << CARLOS_PROJECTION_ACTION
-						<< "' did not finish before the time out.");
-			ac.cancelAllGoals();
-		}
-		else
-		{
-			actionlib::SimpleClientGoalState state = ac.getState();
-			FDEBUG("Action goal on  '" << CARLOS_PROJECTION_ACTION
-						<< "' finished with state: " << state.toString());
+	// RSA_TODO temp comment
+//	// Move to projection pose:
+//	actionlib::SimpleActionClient<mission_ctrl_msgs::projectionPoseAction>
+//			ac(CARLOS_PROJECTION_ACTION, true);
+//	if ( !ac.waitForServer(ros::Duration(3.0)) )
+//	{
+//		FERROR("Failed to call action on '" << CARLOS_PROJECTION_ACTION
+//				 << "'. Cannot move to projection pose.");
+//	}
+//	else
+//	{
+//		FDEBUG("Action server on '" << CARLOS_PROJECTION_ACTION << "' started, sending goal.");
+//		mission_ctrl_msgs::projectionPoseGoal goal;
+//		goal.side = direction;
+//		ac.sendGoal(goal);
+//		if ( !ac.waitForResult(ros::Duration(20.0)) )
+//		{
+//			FERROR("Action goal on '" << CARLOS_PROJECTION_ACTION
+//						<< "' did not finish before the time out.");
+//			ac.cancelAllGoals();
+//		}
+//		else
+//		{
+//			actionlib::SimpleClientGoalState state = ac.getState();
+//			FDEBUG("Action goal on  '" << CARLOS_PROJECTION_ACTION
+//						<< "' finished with state: " << state.toString());
+//		}
+//	}
 
-			// Read and save pose:
-			projection_pose_relative_confirmed_ = cv::Vec2d(0,0);
-			lookupTf("base_footprint", "projector_link", projection_pose_start_);
-		}
-	}
+	// Read and save pose:
+	projection_pose_relative_confirmed_ = cv::Vec2d(0,0);
+	lookupTf("base_footprint", "projector_link", projection_pose_start_);
+	cout << "New teaching goal, projection_pose_start_ t = " << projection_pose_start_.getTranslation()
+		  << ", r = " << projection_pose_start_.getQuaternions() << endl;
 
 	// Start projection:
 	Renderer::getInstance().start(studs);
@@ -301,6 +304,7 @@ bool InterfaceHandler::lookupTf(std::string trg_frame, std::string src_frame,
 		geometry_msgs::TransformStamped tf_stamped =
 				ros_tf_buffer.lookupTransform(trg_frame, src_frame,
 														ros::Time(0), wait_duration);
+		cout << " QUAT: " << tf_stamped.transform.rotation << endl;
 		tf = MathOp::Transform(tf_stamped.transform);
 	}
 	catch (tf2::TransformException &ex)
