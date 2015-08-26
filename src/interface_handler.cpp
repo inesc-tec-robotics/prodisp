@@ -10,6 +10,7 @@
 #include <ros/time.h>
 #include <geometry_msgs/TransformStamped.h>
 #include <geometry_msgs/PoseArray.h>
+#include <std_srvs/Empty.h>
 #include "mission_ctrl_msgs/mission_ctrl_defines.h"
 #include "mission_ctrl_msgs/projectionPoseAction.h"
 #include "mission_ctrl_msgs/moveArmAction.h"
@@ -250,6 +251,21 @@ void InterfaceHandler::wiiTeachingComplete(const vector<Stud*>& studs)
 		ros::param::set(stud_name + "y", t.c[1]);
 		ros::param::set(stud_name + "state", (int)stud->getState());
 		ros::param::set(stud_name + "time_stamp", time_stamp);
+	}
+
+	// Move robot arm to "home" position:
+	std_srvs::Empty home_srv;
+	ros::ServiceClient home_srv_client = nh_.serviceClient<std_srvs::Empty>(CARLOS_ARM_HOME_SRV);
+	if (!home_srv_client.waitForExistence(ros::Duration(1.0)))
+	{
+		FERROR("Failed to move arm to home position; service '" << CARLOS_ARM_HOME_SRV << "' does not exist.");
+	}
+	else
+	{
+		if (!home_srv_client.call(home_srv))
+		{
+			FERROR("Failed to move arm to home position; service '" << CARLOS_ARM_HOME_SRV << "' failed.");
+		}
 	}
 
 	// Reply action server:

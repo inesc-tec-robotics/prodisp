@@ -23,6 +23,7 @@ Stud::Stud(const string& name, XmlRpc::XmlRpcValue stud_data)
 }
 
 Stud::Stud(Vector3 pos)
+	: state_(stud::PENDING)
 {
 	FDEBUG("Stud::Stud: (new)");
 	init(pos);
