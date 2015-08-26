@@ -38,7 +38,7 @@ void Stud::init(Vector3 pos)
 	// Graphics:
 	setColour(Colour::RED);
 	createPrimitive();
-	scaleVertices(0.025);
+	scaleVertices(0.015);
 
 	makeSelectable();
 }
