@@ -60,16 +60,12 @@ class Cursor
 public:
 	Cursor(Renderer* renderer);
 
-	Colour					getColour(void) const;
-
+	// Actions:
 	CursorStates::State	newEvent(CursorEvents::Event event, bool start = true);
-	CursorStates::State	getState(void) const			{ return state_; }
-
-//	CursorEvents::Event	pendingActionGetNext(void);
-//	void						pendingActionAccept(void);
-//	void						pendingActionReject(void);
-
 	void						incrPos(float ix, float iy);
+
+	Colour					getColour(void) const;
+	CursorStates::State	getState(void) const			{ return state_; }
 	cv::Point2f				getPos(void) const { return pos_; }
 	cv::Point2f				getPosNDC(void) const;
 

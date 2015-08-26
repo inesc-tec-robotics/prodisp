@@ -26,6 +26,7 @@ public:
 
 	void					start(const std::vector<Object*> &studs);
 	void					stop(void);
+	bool					isActive(void) { return active_; }
 
 	void					onDisplay();
 	sg::Tf&				getCamera();

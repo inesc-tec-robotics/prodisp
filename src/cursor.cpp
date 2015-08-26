@@ -52,6 +52,10 @@ CursorStates::State Cursor::newEvent(CursorEvents::Event event, bool start)
 {
 	FDEBUG("Cursor::newEvent: " << event);
 
+	// Ignore if not active
+	if (!Renderer::getInstance().isActive())
+		return state_;
+
 	switch (event)
 	{
 	case CursorEvents::Select:		handleSelect(start);		break;
@@ -63,17 +67,6 @@ CursorStates::State Cursor::newEvent(CursorEvents::Event event, bool start)
 	case CursorEvents::Stop:		handleStop();				break;
 	default: FERROR("Unknown event:" << event);				break;
 	}
-
-//	for (int i = 0; i < (int)transition_matrix_.size(); ++i)
-//	{
-//		if (transition_matrix_[i].start_state_ == state_ &&
-//			 transition_matrix_[i].event_ == event)
-//		{
-//			// Change state if possible:
-//			setState(transition_matrix_[i].end_state_);
-//			break;
-//		}
-//	}
 
 	return state_;
 }

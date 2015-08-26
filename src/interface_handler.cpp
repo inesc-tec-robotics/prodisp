@@ -168,6 +168,10 @@ void InterfaceHandler::moveProjectorIncr(float x, float y)
 {
 	FDEBUG("InterfaceHandler::moveProjectorIncr");
 
+	// Ignore if not active
+	if (!Renderer::getInstance().isActive())
+		return;
+
 	// Chack if arm is already moving:
 	if (move_arm_active_)
 		return;

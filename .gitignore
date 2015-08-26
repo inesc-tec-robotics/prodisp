@@ -42,3 +42,5 @@ build/
 /CMakeCache.txt
 /Makefile
 *.cbp
+/html/
+/latex/

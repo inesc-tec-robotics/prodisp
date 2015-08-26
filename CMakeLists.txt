@@ -102,6 +102,7 @@ include_directories(
 
 add_executable(${PROJECT_NAME}
   prodisp.cfg
+  local.cfg
 
   include/application.h
   include/configuration.h
