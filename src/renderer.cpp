@@ -534,7 +534,6 @@ vector<Object*> Renderer::selectInside(cv::Point2f p1, cv::Point2f p2)
 		{
 			if (((viewport_loc[1] - p1.y) > 0) != ((viewport_loc[1] - p2.y) > 0))
 			{
-				cout << "SELECTED!!!!" << endl;
 				ret_val.push_back(*obj_it);
 			}
 		}
