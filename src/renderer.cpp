@@ -84,6 +84,7 @@ void Renderer::stop(void)
 
 		// Clear screen:
 		onDisplay();
+		glutSwapBuffers();
 
 		// Retrieve all studs:
 		vector<Stud*> studs;
@@ -122,11 +123,11 @@ void Renderer::onDisplay()
     {
         interface_handler_.refreshRosTf();
 
-		  rs.setupProjection2D();
-		  renderGraphics2D();
-
         rs.setupProjection3D();
         renderGraphics3D();
+
+		  rs.setupProjection2D();
+		  renderGraphics2D();
     }
 
 	if (Configuration::getInstance().getGuiHelp())
