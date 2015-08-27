@@ -65,12 +65,7 @@ void WiiHandler::joyCallback(const sensor_msgs::Joy::ConstPtr& joy)
 
 				case Wii_2:																				break;
 				case Wii_A:			cursor->newEvent(CursorEvents::Select, down);		break;
-
-				case Wii_BACK:		// Lock cursor position
-										cursor->newEvent(CursorEvents::LockX, down);
-										cursor->newEvent(CursorEvents::LockY, down);
-				break;
-
+				case Wii_BACK:		cursor->newEvent(CursorEvents::EnableRobot, down);	break;
 				case Wii_PLUS:		if(down) cursor->newEvent(CursorEvents::Add);		break;
 				case Wii_MINUS:	if(down) cursor->newEvent(CursorEvents::Delete);	break;
 				case Wii_LEFT:

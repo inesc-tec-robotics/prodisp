@@ -82,6 +82,9 @@ void Renderer::stop(void)
 	{
 		active_ = false;
 
+		// Clear screen:
+		onDisplay();
+
 		// Retrieve all studs:
 		vector<Stud*> studs;
 		set<Object*>& selectable = Object::getSelectable();

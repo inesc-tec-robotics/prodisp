@@ -32,6 +32,7 @@ namespace CursorEvents
 		Calibrate,
 		LockX,
 		LockY,
+		EnableRobot,
 		Stop,
 
 		NoEvent	// Dummy
@@ -75,13 +76,14 @@ public:
 private:
 	void						cbCursorBorder(const ros::TimerEvent&);
 
-	void						handleSelect	(bool start);
-	void						handleAdd		(void);
-	void						handleDelete	(void);
-	void						handleCalibrate(bool start);
-	void						handleLockX		(bool start);
-	void						handleLockY		(bool start);
-	void						handleStop		(void);
+	void						handleSelect		(bool start);
+	void						handleAdd			(void);
+	void						handleDelete		(void);
+	void						handleCalibrate	(bool start);
+	void						handleLockX			(bool start);
+	void						handleLockY			(bool start);
+	void						handleEnableRobot	(bool start);
+	void						handleStop			(void);
 
 private:
 	ros::NodeHandle nh_;
@@ -96,6 +98,7 @@ private:
 
 	int						x_locked_;
 	int						y_locked_;
+	bool						robot_movement_enabled_;
 };
 
 

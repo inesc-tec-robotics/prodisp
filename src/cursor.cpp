@@ -24,25 +24,25 @@ Cursor::Cursor(Renderer* renderer)
 
 Colour Cursor::getColour(void) const
 {
-	Colour c;
+	Colour c = Colour::WHITE;
 
-	switch (state_)
+	if (robot_movement_enabled_)
 	{
-		case CursorStates::Marking:
-		case CursorStates::Holding:
-			c = Colour::GREEN;
-		break;
+		c = Colour::YELLOW;
+	}
+	else
+	{
+		switch (state_)
+		{
+			case CursorStates::Marking:
+			case CursorStates::Holding:
+					c = Colour::GREEN;
+			break;
 
-		case CursorStates::Idle:
-			c = Colour::WHITE;
-		break;
-
-		case CursorStates::Calibrating:
-			c = Colour::MAGENTA;
-		break;
-
-		default:
-			FERROR("Unknown cursor state: " << state_);
+			case CursorStates::Calibrating:
+				c = Colour::MAGENTA;
+			break;
+		}
 	}
 
 	return c;
@@ -58,14 +58,15 @@ CursorStates::State Cursor::newEvent(CursorEvents::Event event, bool start)
 
 	switch (event)
 	{
-	case CursorEvents::Select:		handleSelect(start);		break;
-	case CursorEvents::Add:			handleAdd();				break;
-	case CursorEvents::Delete:		handleDelete();			break;
-	case CursorEvents::Calibrate:	handleCalibrate(start);	break;
-	case CursorEvents::LockX:		handleLockX(start);		break;
-	case CursorEvents::LockY:		handleLockY(start);		break;
-	case CursorEvents::Stop:		handleStop();				break;
-	default: FERROR("Unknown event:" << event);				break;
+	case CursorEvents::Select:			handleSelect(start);		break;
+	case CursorEvents::Add:				handleAdd();				break;
+	case CursorEvents::Delete:			handleDelete();			break;
+	case CursorEvents::Calibrate:		handleCalibrate(start);	break;
+	case CursorEvents::LockX:			handleLockX(start);		break;
+	case CursorEvents::LockY:			handleLockY(start);		break;
+	case CursorEvents::EnableRobot:	handleEnableRobot(start);break;
+	case CursorEvents::Stop:			handleStop();				break;
+	default: FERROR("Unknown event:" << event);					break;
 	}
 
 	return state_;
@@ -147,12 +148,12 @@ void Cursor::cbCursorBorder(const ros::TimerEvent&)
 	if (dist_abs_y < b_proj)
 		proj_y = sign_y * rot_proj;
 
-	// Move cursor:
-	if (curs_x != 0.0 || curs_y != 0.0)
-		incrPos(curs_x, curs_y);
+//	// Move cursor:
+//	if (curs_x != 0.0 || curs_y != 0.0)
+//		incrPos(curs_x, curs_y);
 
 	// Move robot arm:
-	if (state_ != CursorStates::Calibrating && (proj_x != 0.0 || proj_y != 0.0))
+	if (state_ != CursorStates::Calibrating && robot_movement_enabled_ && (proj_x != 0.0 || proj_y != 0.0))
 	{
 		Renderer::getInstance().getInterfaceHandler().moveProjectorIncr(proj_x, proj_y);
 	}
@@ -235,6 +236,14 @@ void Cursor::handleLockY(bool start)
 		else
 			y_locked_ = max(0, y_locked_-1);
 	}
+}
+
+void Cursor::handleEnableRobot(bool start)
+{
+	if (start == false)
+		robot_movement_enabled_ = false;
+	else if (state_ != CursorStates::Calibrating)
+		robot_movement_enabled_ = true;
 }
 
 void Cursor::handleStop(void)
