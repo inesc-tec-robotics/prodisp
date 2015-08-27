@@ -238,8 +238,11 @@ void InterfaceHandler::wiiTeachingComplete(const vector<Stud*>& studs)
 	{
 		// Create stud name on param server:
 		stringstream stud_name_ss;
-		stud_name_ss << wii_teaching_task_ << "/studs/stud"
-						  << setfill('0') << setw(3) << stud_num+1
+//		stud_name_ss << wii_teaching_task_ << "/studs/stud"
+//						  << setfill('0') << setw(3) << stud_num+1
+//						  << "/";
+		stud_name_ss << wii_teaching_task_ << "/studs/stud_"
+						  << stud_num+1
 						  << "/";
 		string stud_name = stud_name_ss.str();
 
